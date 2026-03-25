@@ -2,10 +2,9 @@ const formData = { email: '', message: '' };
 const form = document.querySelector('.feedback-form');
 const FEEDBACK_FORM_STATE = 'feedback-form-state';
 
-document.addEventListener('DOMContentLoaded', () => {
-  const savedFormData = localStorage.getItem(FEEDBACK_FORM_STATE);
-  if (!savedFormData) return;
-
+// Відновлення
+const savedFormData = localStorage.getItem(FEEDBACK_FORM_STATE);
+if (savedFormData) {
   const parsedFormData = JSON.parse(savedFormData);
 
   formData.email = parsedFormData.email || '';
@@ -13,16 +12,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
   form.elements.email.value = formData.email;
   form.elements.message.value = formData.message;
-});
+}
 
 // input
 form.addEventListener('input', (e) => {
-  formData[e.target.name] = e.target.value.trim();
+  if (e.target.name === 'email' || e.target.name === 'message') {
+    formData[e.target.name] = e.target.value.trim();
 
-  localStorage.setItem(
-    FEEDBACK_FORM_STATE,
-    JSON.stringify(formData)
-  );
+    localStorage.setItem(
+      FEEDBACK_FORM_STATE,
+      JSON.stringify(formData)
+    );
+  }
 });
 
 // submit
